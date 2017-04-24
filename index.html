@@ -9,8 +9,14 @@
 <style>
 *{margin:0;padding:0;-webkit-user-select:none;font-family:consolas;box-sizing: border-box;}
 html,body{height: 100%;}
-main{width: 100%;height: 100%;}
-.worktable{position: relative;top: 50%;left: 50%;transform: translate(-50%, -50%);}
+::-webkit-scrollbar{width: 10px;height: 10px;background-color: rgba(0,0,0,.2);}
+::-webkit-scrollbar-thumb{ width: 10px;height: 10px;border: 1px solid rgba(0,0,0,.5);background-color: #fff;border-radius: 50px;}
+
+.theme{background-color: #c0ffee;color: #fff;}
+
+
+main{width: 100%;height: 100%;display: flex;}
+.worktable{position: relative;margin: auto;}
 .worktable .refer,.worktable .opr-area{position: absolute;top: 0;left: 0;}
 .worktable .refer{z-index: 1;}
 .worktable .opr-area{z-index: 2;}
