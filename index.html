@@ -8,81 +8,92 @@
 <title>测试</title>
 <style>
 *{margin:0;padding:0;-webkit-user-select:none;font-family:consolas;}
-
+html,body{height: 100%;}
 ::-webkit-scrollbar{width: 10px;height: 10px;background-color: rgba(0,0,0,.2);}
 ::-webkit-scrollbar-thumb{ width: 10px;height: 10px;border: 1px solid rgba(0,0,0,.5);background-color: #fff;border-radius: 50px;}
 
-.theme{background-color: #c0ffee;color: #fff;}
+body{font-size: 0;}
 
-main{}
-.worktable{position: relative;padding: 20px;}
-.worktable .refer,.worktable .opr-area{position: absolute;top: 20px;left: 20px;}
-.worktable .refer{z-index: 1;}
-.worktable .opr-area{z-index: 2;}
+.section{display: inline-block;}
+
+#tool-box{}
+
+#worktable{max-width: calc(100% - 100px);height: 100%;overflow: auto;}
+
+#worktable .canvas-wrap{position: relative;padding: 20px;}
+#worktable .refer,#worktable .painted{position: absolute;top: 20px;left: 20px;}
+#worktable .refer{z-index: 1;}
+#worktable .painted{z-index: 2;}
 </style>
 </head>
 <body>
-	<div id="tool-box">
-
+	<div id="tool-box" class="section">
+		
 	</div>
-	<main>
-		<div class="worktable">
+	<div id="worktable" class="section">
+		<div class="canvas-wrap">
 			<img src="" alt="" class="refer" />
-			<canvas class="opr-area" width="0" height="0"></canvas>
+			<canvas width="0" height="0" class="painted"></canvas>
 		</div>
-	</main>
-	<div id="side-menu">
-
+	</div>
+	<div id="menu" class="section">
+		
 	</div>
 </body>
 </html>
 <script>
-window.onload = function () {
-	var worktable = document.querySelector(".worktable"),
+(function (){
+	var toolBox = document.querySelector("#tool-box"),
+		worktable = document.querySelector("#worktable"),
+		menu = document.querySelector("#menu"),
+
+		canvasWrap = worktable.querySelector(".canvas-wrap"),
 		refer = worktable.querySelector(".refer"),
-		oprArea = worktable.querySelector(".opr-area"),
-		pen = oprArea.getContext('2d');
-	document.ondragenter =
-	document.ondragover = function (){return false;}
-	document.ondrop = function (ev) {
-		var file = ev.dataTransfer.files[0],
-			reader = new FileReader();
 
-			if(/image/.test(file.type)) {
-				reader.readAsDataURL(file);
-			}
+		painted = worktable.querySelector(".painted"),
+		pen = painted.getContext("2d");
 
-			reader.onload = function () {
-				refer.src = reader.result;
-				var nw = refer.naturalWidth,
-					nh = refer.naturalHeight;
-					initWorkTable(nw, nh);
-			}
-
-
+		window.ondragenter = window.ondragover = function () {
 			return false;
-	}
-	function initWorkTable (w, h) {
-		//设置宽高
-		worktable.style.width = w + "px";
-		worktable.style.height = h + "px";
-		oprArea.width = w;
-		oprArea.height = h;
+		}
 
-		//绘制
-		pen.drawImage(refer,0,0,w,h,0,0,w,h);
-		pen.globalCompositeOperation = "color";
-		pen.fillStyle = "#fff";
-		pen.fillRect(0,0,w,h);
-	}
-	oprArea.onmousedown = function (ev) {
-		var that = this;
-		var offset = {
-			t: that.getBoundingClientRect().top,
-			l: that.getBoundingClientRect().left
-		};
-		pen.clearRect(ev.clientX - offset.l - 25,ev.clientY - offset.t - 25,50,50);
+		window.ondrop = function (ev) {
+			var file = ev.dataTransfer.files[0],
+				reader = new FileReader();
 
-	}
-}
+				if(/image/.test(file.type)) {
+					reader.readAsDataURL(file);
+				}
+
+				reader.onload = function () {
+					refer.src = reader.result;
+
+					refer.onload = function () {
+						var nw = refer.naturalWidth,
+							nh = refer.naturalHeight;
+							
+							initWorkTable(nw, nh);
+					}
+				}
+
+			ev.preventDefault();
+			return false;
+		}
+		
+		function initWorkTable (w, h) {
+			canvasWrap.style.width = w + "px";
+			canvasWrap.style.height = h + "px";
+			painted.width = w;
+			painted.height = h;
+
+			pen.clearRect(0,0,w,h);
+			pen.drawImage(refer,0,0,w,h,0,0,w,h);
+			pen.globalCompositeOperation = "saturation";
+			pen.fillStyle = "#666";
+			pen.fillRect(0,0,w,h);
+
+		}
+
+
+}());
 </script>

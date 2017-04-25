@@ -13,24 +13,56 @@ body{transform-style: preserve-3d;-webkit-perspective: 1200;perspective: 1200;}
 </style>
 </head>
 <body>
-	<div class="out">
-		<div class="in">
-			<input type="text" />
-		</div>
-	</div>
+
 </body>
 </html>
 <script>
 window.onload = function () {
-	var it = document.querySelector("input"),
-		inn = document.querySelector(".in"),
-		out = document.querySelector(".out");
-		it.oninput = function () {
-			if(this.value.length > 2) {
-				inn.style.width = parseInt(this.value) + "px";
-				out.style.width = parseInt(this.value) + "px";
+	/*var worktable = document.querySelector(".worktable"),
+		refer = worktable.querySelector(".refer"),
+		oprArea = worktable.querySelector(".opr-area"),
+		pen = oprArea.getContext('2d');
+	document.ondragenter = document.ondragover = function (){return false;}
+	document.ondrop = function (ev) {
+		var file = ev.dataTransfer.files[0],
+			reader = new FileReader();
 
+			if(/image/.test(file.type)) {
+				reader.readAsDataURL(file);
 			}
-		}
+
+			reader.onload = function () {
+				refer.src = reader.result;
+				console.log(refer);
+				var nw = refer.naturalWidth,
+					nh = refer.naturalHeight;
+					//initWorkTable(nw, nh);
+			}
+
+
+			return false;
+	}
+	function initWorkTable (w, h) {
+		//设置宽高
+		worktable.style.width = w + "px";
+		worktable.style.height = h + "px";
+		oprArea.setAttribute("width", w);
+		oprArea.setAttribute("height", h);
+
+		//清空上下文并绘制新图像
+		pen.clearRect(0,0,w,h);
+		pen.drawImage(refer,0,0,w,h,0,0,w,h);
+		pen.globalCompositeOperation = "saturation";
+		pen.fillStyle = "#666";
+		pen.fillRect(0,0,w,h);
+	}
+	oprArea.onmousedown = function (ev) {
+		var that = this;
+		var offset = {
+			t: that.getBoundingClientRect().top,
+			l: that.getBoundingClientRect().left
+		};
+		pen.clearRect(ev.clientX - offset.l - 25,ev.clientY - offset.t - 25,50,50);
+	}*/
 }
 </script>
