@@ -8,61 +8,44 @@
 <style>
 *{margin:0;padding:0;-webkit-user-select:none;font-family:consolas;}
 body{transform-style: preserve-3d;-webkit-perspective: 1200;perspective: 1200;}
-.out{position: relative;padding: 20px;}
-.in{position: absolute;top: 0;left: 0;width: 200px;height: 100px;background-color: orange;}
+canvas{border: 1px solid orange;}
 </style>
 </head>
 <body>
-
+	<canvas width="600" height="600"></canvas>
 </body>
 </html>
 <script>
 window.onload = function () {
-	/*var worktable = document.querySelector(".worktable"),
-		refer = worktable.querySelector(".refer"),
-		oprArea = worktable.querySelector(".opr-area"),
-		pen = oprArea.getContext('2d');
-	document.ondragenter = document.ondragover = function (){return false;}
-	document.ondrop = function (ev) {
-		var file = ev.dataTransfer.files[0],
-			reader = new FileReader();
+	var ca = document.querySelector("canvas"),
+		pen = ca.getContext("2d");
+		pen.strokeStyle = "orange";
+		pen.lineWidth = 10;
+		pen.lineCap = "round"
 
-			if(/image/.test(file.type)) {
-				reader.readAsDataURL(file);
-			}
+		pen.fillStyle = "orange";
+		pen.fillRect(0,0,600,600);
+		pen.globalCompositeOperation = "destination-out";
 
-			reader.onload = function () {
-				refer.src = reader.result;
-				console.log(refer);
-				var nw = refer.naturalWidth,
-					nh = refer.naturalHeight;
-					//initWorkTable(nw, nh);
-			}
+		ca.onmousedown = function (ev) {
+			/*var startX = ev.clientX,
+				startY = ev.clientY;*/
+				//pen.moveTo(startX,startY);
+				document.onmousemove = function (ev) {
+					var endX = ev.clientX,
+						endY = ev.clientY;
+						//pen.clearRect(0,0,600,600);
+						//pen.lineTo(endX,endY);
+						//pen.stroke();
+						pen.beginPath();
+						pen.arc(endX,endY,10,0,Math.PI*2,false);
+						pen.fill();
+				}
+				document.onmouseup = function () {
+					this.onmousemove = null;
+					this.onmouseup = null;
+				}
+		}
 
-
-			return false;
-	}
-	function initWorkTable (w, h) {
-		//设置宽高
-		worktable.style.width = w + "px";
-		worktable.style.height = h + "px";
-		oprArea.setAttribute("width", w);
-		oprArea.setAttribute("height", h);
-
-		//清空上下文并绘制新图像
-		pen.clearRect(0,0,w,h);
-		pen.drawImage(refer,0,0,w,h,0,0,w,h);
-		pen.globalCompositeOperation = "saturation";
-		pen.fillStyle = "#666";
-		pen.fillRect(0,0,w,h);
-	}
-	oprArea.onmousedown = function (ev) {
-		var that = this;
-		var offset = {
-			t: that.getBoundingClientRect().top,
-			l: that.getBoundingClientRect().left
-		};
-		pen.clearRect(ev.clientX - offset.l - 25,ev.clientY - offset.t - 25,50,50);
-	}*/
 }
 </script>

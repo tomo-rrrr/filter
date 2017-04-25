@@ -28,7 +28,7 @@ body{font-size: 0;}
 </head>
 <body>
 	<div id="tool-box" class="section">
-		
+
 	</div>
 	<div id="worktable" class="section">
 		<div class="canvas-wrap">
@@ -37,7 +37,7 @@ body{font-size: 0;}
 		</div>
 	</div>
 	<div id="menu" class="section">
-		
+
 	</div>
 </body>
 </html>
@@ -51,7 +51,12 @@ body{font-size: 0;}
 		refer = worktable.querySelector(".refer"),
 
 		painted = worktable.querySelector(".painted"),
-		pen = painted.getContext("2d");
+		pen = painted.getContext("2d"),
+		offset = {
+			t: painted.getBoundingClientRect().top,
+			l: painted.getBoundingClientRect().left
+		};
+		console.log(offset);
 
 		window.ondragenter = window.ondragover = function () {
 			return false;
@@ -71,15 +76,14 @@ body{font-size: 0;}
 					refer.onload = function () {
 						var nw = refer.naturalWidth,
 							nh = refer.naturalHeight;
-							
+
 							initWorkTable(nw, nh);
 					}
 				}
 
-			ev.preventDefault();
 			return false;
 		}
-		
+
 		function initWorkTable (w, h) {
 			canvasWrap.style.width = w + "px";
 			canvasWrap.style.height = h + "px";
@@ -91,9 +95,23 @@ body{font-size: 0;}
 			pen.globalCompositeOperation = "saturation";
 			pen.fillStyle = "#666";
 			pen.fillRect(0,0,w,h);
-
 		}
 
+		painted.onmousedown = function () {
+			document.onmousemove = function (ev) {
+				var X = ev.clientX,
+					Y = ev.clientY;
+
+					pen.globalCompositeOperation = "destination-out";
+					pen.beginPath();
+					pen.arc(X - offset.l,Y - offset.t,10,0,Math.PI*2,false);
+					pen.fill();
+			}
+			document.onmouseup = function () {
+				this.onmousemove = null;
+				this.onmouseup = null;
+			}
+		}
 
 }());
 </script>
