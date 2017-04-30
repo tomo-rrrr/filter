@@ -56,10 +56,9 @@ body{font-size: 0;}
 			t: painted.getBoundingClientRect().top,
 			l: painted.getBoundingClientRect().left
 		};
-		console.log(offset);
 
-		window.ondragenter = window.ondragover = function () {
-			return false;
+		window.ondragenter = window.ondragover = function (ev) {
+			ev.preventDefault();
 		}
 
 		window.ondrop = function (ev) {
@@ -80,8 +79,7 @@ body{font-size: 0;}
 							initWorkTable(nw, nh);
 					}
 				}
-
-			return false;
+			ev.preventDefault();
 		}
 
 		function initWorkTable (w, h) {

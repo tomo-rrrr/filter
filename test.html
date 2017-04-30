@@ -9,43 +9,51 @@
 *{margin:0;padding:0;-webkit-user-select:none;font-family:consolas;}
 body{transform-style: preserve-3d;-webkit-perspective: 1200;perspective: 1200;}
 canvas{border: 1px solid orange;}
+.target{width: 600px;height: 600px;display: flex;border: solid 1px red;}
+.target img{margin: auto;display: block;}
 </style>
 </head>
 <body>
-	<canvas width="600" height="600"></canvas>
+	<div class="target">
+		<img src="" alt="">
+	</div>
 </body>
 </html>
 <script>
 window.onload = function () {
-	var ca = document.querySelector("canvas"),
-		pen = ca.getContext("2d");
-		pen.strokeStyle = "orange";
-		pen.lineWidth = 10;
-		pen.lineCap = "round"
+	var img = document.querySelector(".target img");
+	document.addEventListener("dragenter", prevent);
+	document.addEventListener("dragover", prevent);
+	//document.addEventListener("click", prevent);
+	function prevent(ev) {
+		ev.preventDefault();
+	}
+	//document.ondragenter = document.ondragover = function (){return false;}
+	document.ondrop = function (ev) {
+		var file = ev.dataTransfer.files[0],
+			reader = new FileReader();
 
-		pen.fillStyle = "orange";
-		pen.fillRect(0,0,600,600);
-		pen.globalCompositeOperation = "destination-out";
+			reader.readAsDataURL(file);
 
-		ca.onmousedown = function (ev) {
-			/*var startX = ev.clientX,
-				startY = ev.clientY;*/
-				//pen.moveTo(startX,startY);
-				document.onmousemove = function (ev) {
-					var endX = ev.clientX,
-						endY = ev.clientY;
-						//pen.clearRect(0,0,600,600);
-						//pen.lineTo(endX,endY);
-						//pen.stroke();
-						pen.beginPath();
-						pen.arc(endX,endY,10,0,Math.PI*2,false);
-						pen.fill();
+			reader.onload = function () {
+				img.src = reader.result;
+				img.setAttribute("width", 0);
+				img.setAttribute("height", 0);
+				img.onload = function () {
+					if(this.naturalWidth > this.naturalHeight || this.naturalWidth == this.naturalHeight) {
+
+						this.setAttribute("width",600);
+						this.removeAttribute("height");
+
+					}else if (this.naturalWidth < this.naturalHeight) {
+
+						this.setAttribute("height",600);
+						this.removeAttribute("width");
+
+					}
 				}
-				document.onmouseup = function () {
-					this.onmousemove = null;
-					this.onmouseup = null;
-				}
-		}
-
+			}
+			return false
+	}
 }
 </script>
