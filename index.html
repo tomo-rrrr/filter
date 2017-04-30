@@ -14,16 +14,18 @@ html,body{height: 100%;}
 
 body{font-size: 0;}
 
-.section{display: inline-block;}
+.section{display: inline-block;height: 100%;}
 
 #tool-box{}
 
-#worktable{max-width: calc(100% - 100px);height: 100%;overflow: auto;}
+#worktable{max-width: calc(100% - 100px);overflow: auto;}
 
 #worktable .canvas-wrap{position: relative;padding: 20px;}
 #worktable .refer,#worktable .painted{position: absolute;top: 20px;left: 20px;}
 #worktable .refer{z-index: 1;}
 #worktable .painted{z-index: 2;}
+
+#menu{width: 100px;background-color: orange;}
 </style>
 </head>
 <body>
@@ -55,7 +57,8 @@ body{font-size: 0;}
 		offset = {
 			t: painted.getBoundingClientRect().top,
 			l: painted.getBoundingClientRect().left
-		};
+		},
+		eraserSize = 10;
 
 		window.ondragenter = window.ondragover = function (ev) {
 			ev.preventDefault();
@@ -102,7 +105,13 @@ body{font-size: 0;}
 
 					pen.globalCompositeOperation = "destination-out";
 					pen.beginPath();
-					pen.arc(X - offset.l,Y - offset.t,10,0,Math.PI*2,false);
+					pen.arc(
+						X - offset.l,
+						Y - offset.t,
+						eraserSize,
+						0, Math.PI * 2,
+						false
+					);
 					pen.fill();
 			}
 			document.onmouseup = function () {
